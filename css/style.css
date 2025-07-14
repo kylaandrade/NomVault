@@ -179,15 +179,10 @@ nav a:hover {
   justify-content: flex-end;
   gap: 10px;
 }
-<<<<<<< HEAD
 
 .actions .btn {
   padding: 6px 12px;
   font-size: 0.85rem;
-=======
-.card a {
-  color: #9008a5;
->>>>>>> 8d212050fd02e734fd35955b12dbe2a6da7de016
   text-decoration: none;
   border-radius: 5px;
   transition: background 0.3s;
