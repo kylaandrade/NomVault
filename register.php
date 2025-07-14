@@ -1,13 +1,18 @@
 <?php
+<<<<<<< HEAD
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 include 'db.php';
 
+=======
+include 'db.php';
+>>>>>>> 2f94898824effd64bb9c74b1007bf2aff003fda6
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $name = $_POST['name'];
     $email = $_POST['email'];
     $pass = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
+<<<<<<< HEAD
     if ($conn->connect_error) {
         die("Database connection failed: " . $conn->connect_error);
     }
@@ -18,6 +23,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         die("Prepare failed: " . $conn->error);
     }
 
+=======
+    $check = $conn->prepare("SELECT id FROM users WHERE email=?");
+>>>>>>> 2f94898824effd64bb9c74b1007bf2aff003fda6
     $check->bind_param("s", $email);
     $check->execute();
     $check->store_result();
@@ -26,6 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $error = "Email already exists.";
     } else {
         $stmt = $conn->prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)");
+<<<<<<< HEAD
 
         if (!$stmt) {
             die("Prepare failed: " . $conn->error);
@@ -39,6 +48,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 }
 ?>
 
+=======
+        $stmt->bind_param("sss", $name, $email, $pass);
+        $stmt->execute();
+        header("Location: login.php");
+    }
+}
+?>
+>>>>>>> 2f94898824effd64bb9c74b1007bf2aff003fda6
 <link rel="stylesheet" href="css/style.css">
 <header><img src="assets/logo.png" class="logo"><nav><a href="login.php">Login</a></nav></header>
 <div class="container">
@@ -50,4 +67,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <button type="submit">Register</button>
         <?php if (isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
     </form>
+<<<<<<< HEAD
 </div>
+=======
+</div>
+>>>>>>> 2f94898824effd64bb9c74b1007bf2aff003fda6
