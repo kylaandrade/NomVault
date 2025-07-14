@@ -1,71 +1,156 @@
-@import url('../assets/animations.css');
+:root {
+  --primary: #7c4dff;
+  --primary-light: #ede7f6;
+}
 
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
-  background: #f7f8fa;
+  background: #f8f9fb;
+  color: #333;
 }
+
 header {
-  background: white;
+  background: #fff;
   display: flex;
   align-items: center;
-  padding: 10px 20px;
-  border-bottom: 1px solid #ccc;
+  justify-content: space-between;
+  padding: 15px 30px;
+  border-bottom: 1px solid #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.03);
 }
-header .logo {
-  height: 40px;
-  margin-right: 15px;
+
+.logo {
+  height: 42px;
 }
+
 nav a {
-  margin-right: 15px;
-  color: #555;
   text-decoration: none;
-  font-weight: bold;
+  margin-left: 20px;
+  color: var(--primary);
+  font-weight: 600;
+  transition: color 0.3s;
 }
 nav a:hover {
-  color: #000;
+  color: #4a148c;
 }
+
 .container {
-  padding: 20px;
-}
-form {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  max-width: 500px;
-  margin: 0 auto;
-}
-.cards {
-  display: grid;
-  gap: 20px;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-}
-.card {
-  background: white;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  transition: transform 0.3s ease;
-}
-.card:hover {
-  transform: translateY(-5px);
-}
-.card img {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-  border-radius: 5px;
-}
-.card .actions {
-  margin-top: 10px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
 }
-.card a {
-  color: #007bff;
+
+.auth-form {
+  background: white;
+  padding: 40px;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+  text-align: center;
+}
+
+.auth-form h2 {
+  margin-bottom: 10px;
+  color: var(--primary);
+}
+
+.auth-form .subtitle {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 25px;
+}
+
+.auth-form input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border 0.3s;
+}
+.auth-form input:focus {
+  border-color: var(--primary);
+  outline: none;
+}
+
+.auth-form button {
+  width: 100%;
+  padding: 12px;
+  background: var(--primary);
+  color: white;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.3s;
+}
+.auth-form button:hover {
+  background: #5e35b1;
+}
+
+.error {
+  color: red;
+  margin-top: 10px;
+  font-size: 0.9rem;
+}
+
+.cards {
+  flex-direction: column;
+  padding: 40px;
+}
+.cards h2 {
+  margin-bottom: 20px;
+  color: var(--primary);
+}
+.recipe-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+.recipe-card img {
+  width: 100%;
+  max-height: 250px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+.recipe-card h3 {
+  margin: 0 0 10px;
+  color: #4a148c;
+}
+.actions {
+  margin-top: 15px;
+}
+.actions .btn {
   text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  margin-right: 8px;
+  display: inline-block;
 }
-.card a:hover {
-  text-decoration: underline;
+.btn.edit {
+  background: #7e57c2;
+  color: white;
+}
+.btn.edit:hover {
+  background: #5e35b1;
+}
+.btn.delete {
+  background: #f44336;
+  color: white;
+}
+.btn.delete:hover {
+  background: #d32f2f;
+}
+textarea {
+  resize: vertical;
+  font-family: inherit;
 }
