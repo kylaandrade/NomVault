@@ -28,22 +28,25 @@ $result = $stmt->get_result();
         <a href="logout.php">Logout</a>
     </nav>
 </header>
-<div class="container cards">
-    <h2>Your Saved Recipes</h2>
-    <?php while ($row = $result->fetch_assoc()): ?>
-        <div class="recipe-card">
-            <?php if ($row['photo']): ?>
-                <img src="uploads/<?= $row['photo'] ?>" alt="<?= htmlspecialchars($row['title']) ?>">
-            <?php endif; ?>
-            <h3><?= htmlspecialchars($row['title']) ?></h3>
-            <p><strong>Ingredients:</strong> <?= nl2br(htmlspecialchars($row['ingredients'])) ?></p>
-            <p><strong>Steps:</strong> <?= nl2br(htmlspecialchars($row['steps'])) ?></p>
-            <div class="actions">
-                <a href="edit_recipe.php?id=<?= $row['id'] ?>" class="btn edit">Edit</a>
-                <a href="delete_recipe.php?id=<?= $row['id'] ?>" class="btn delete" onclick="return confirm('Are you sure you want to delete this recipe?')">Delete</a>
+<div class="container">
+    <h2 class="dashboard-heading">Your Saved Recipes</h2>
+    <div class="cards">
+        <?php while ($row = $result->fetch_assoc()): ?>
+            <div class="recipe-card">
+                <?php if ($row['photo']): ?>
+                    <img src="uploads/<?= $row['photo'] ?>" alt="<?= htmlspecialchars($row['title']) ?>">
+                <?php endif; ?>
+                <h3><?= htmlspecialchars($row['title']) ?></h3>
+                <p><strong>Ingredients:</strong> <?= nl2br(htmlspecialchars($row['ingredients'])) ?></p>
+                <hr class="divider">
+                <p><strong>Steps:</strong> <?= nl2br(htmlspecialchars($row['steps'])) ?></p>
+                <div class="actions">
+                    <a href="edit_recipe.php?id=<?= $row['id'] ?>" class="btn edit">Edit</a>
+                    <a href="delete_recipe.php?id=<?= $row['id'] ?>" class="btn delete" onclick="return confirm('Delete this recipe?')">Delete</a>
+                </div>
             </div>
-        </div>
-    <?php endwhile; ?>
+        <?php endwhile; ?>
+    </div>
 </div>
 </body>
 </html>
