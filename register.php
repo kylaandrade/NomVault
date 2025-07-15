@@ -1,6 +1,5 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+session_start();
 include 'db.php';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -8,16 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = $_POST['email'];
     $pass = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
-    if ($conn->connect_error) {
-        die("Database connection failed: " . $conn->connect_error);
-    }
-
     $check = $conn->prepare("SELECT id FROM users WHERE email=?");
-
-    if (!$check) {
-        die("Prepare failed: " . $conn->error);
-    }
-
     $check->bind_param("s", $email);
     $check->execute();
     $check->store_result();
@@ -26,11 +16,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $error = "Email already exists.";
     } else {
         $stmt = $conn->prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)");
-
-        if (!$stmt) {
-            die("Prepare failed: " . $conn->error);
-        }
-
         $stmt->bind_param("sss", $name, $email, $pass);
         $stmt->execute();
         header("Location: login.php");
@@ -46,13 +31,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </head>
 <body>
 <header>
-  <img src="assets/logo.png" class="logo" alt="NomVault Logo">
-  <nav>
-    <a href="login.php">Login</a>
-    <a href="register.php">Register</a>
-  </nav>
+    <img src="assets/logo.png" class="logo" alt="NomVault Logo">
+    <nav>
+        <a href="login.php">Login</a>
+        <a href="register.php">Register</a>
+    </nav>
 </header>
-
 <div class="container">
     <form method="post" class="auth-form">
         <h2>Create Account</h2>
