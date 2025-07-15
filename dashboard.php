@@ -8,10 +8,26 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $user_id = $_SESSION['user_id'];
+
 $stmt = $conn->prepare("SELECT * FROM recipes WHERE user_id=? ORDER BY id DESC");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
+
+$count_stmt = $conn->prepare("SELECT COUNT(*) as total FROM recipes WHERE user_id=?");
+$count_stmt->bind_param("i", $user_id);
+$count_stmt->execute();
+$count_result = $count_stmt->get_result()->fetch_assoc();
+$total_recipes = $count_result['total'];
+
+$search = "";
+if (isset($_GET['search'])) {
+    $search = trim($_GET['search']);
+    $stmt = $conn->prepare("SELECT * FROM recipes WHERE user_id=? AND (title LIKE CONCAT('%', ?, '%') OR ingredients LIKE CONCAT('%', ?, '%')) ORDER BY id DESC");
+    $stmt->bind_param("iss", $user_id, $search, $search);
+    $stmt->execute();
+    $result = $stmt->get_result();
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -28,24 +44,43 @@ $result = $stmt->get_result();
         <a href="logout.php">Logout</a>
     </nav>
 </header>
+
 <div class="container">
     <h2 class="dashboard-heading">Your Saved Recipes</h2>
+    <p class="dashboard-subtext">Welcome to your personal recipe vault! Save, organize, and share your favorite recipes all in one place.</p>
+
+    <div class="info-cards">
+        <div class="info-card">
+            <h3><?= $total_recipes ?></h3>
+            <p>Total Recipes</p>
+        </div>
+    </div>
+
+    <form method="GET" class="search-form">
+        <input type="text" name="search" placeholder="Search recipes..." value="<?= htmlspecialchars($search) ?>">
+        <button type="submit">Search</button>
+    </form>
+
     <div class="cards">
-        <?php while ($row = $result->fetch_assoc()): ?>
-            <div class="recipe-card">
-                <?php if ($row['photo']): ?>
-                    <img src="uploads/<?= $row['photo'] ?>" alt="<?= htmlspecialchars($row['title']) ?>">
-                <?php endif; ?>
-                <h3><?= htmlspecialchars($row['title']) ?></h3>
-                <p><strong>Ingredients:</strong> <?= nl2br(htmlspecialchars($row['ingredients'])) ?></p>
-                <hr class="divider">
-                <p><strong>Steps:</strong> <?= nl2br(htmlspecialchars($row['steps'])) ?></p>
-                <div class="actions">
-                    <a href="edit_recipe.php?id=<?= $row['id'] ?>" class="btn edit">Edit</a>
-                    <a href="delete_recipe.php?id=<?= $row['id'] ?>" class="btn delete" onclick="return confirm('Delete this recipe?')">Delete</a>
+        <?php if ($result->num_rows > 0): ?>
+            <?php while ($row = $result->fetch_assoc()): ?>
+                <div class="recipe-card">
+                    <?php if ($row['photo']): ?>
+                        <img src="uploads/<?= $row['photo'] ?>" alt="<?= htmlspecialchars($row['title']) ?>">
+                    <?php endif; ?>
+                    <h3><?= htmlspecialchars($row['title']) ?></h3>
+                    <p><strong>Ingredients:</strong> <?= nl2br(htmlspecialchars($row['ingredients'])) ?></p>
+                    <hr class="divider">
+                    <p><strong>Steps:</strong> <?= nl2br(htmlspecialchars($row['steps'])) ?></p>
+                    <div class="actions">
+                        <a href="edit_recipe.php?id=<?= $row['id'] ?>" class="btn edit">Edit</a>
+                        <a href="delete_recipe.php?id=<?= $row['id'] ?>" class="btn delete" onclick="return confirm('Delete this recipe?')">Delete</a>
+                    </div>
                 </div>
-            </div>
-        <?php endwhile; ?>
+            <?php endwhile; ?>
+        <?php else: ?>
+            <p class="no-results">No recipes found for your search.</p>
+        <?php endif; ?>
     </div>
 </div>
 </body>

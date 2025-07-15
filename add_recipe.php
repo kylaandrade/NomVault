@@ -41,6 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <a href="logout.php">Logout</a>
     </nav>
 </header>
+
 <div class="container">
     <form method="post" enctype="multipart/form-data" class="auth-form">
         <h2>Add New Recipe</h2>

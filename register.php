@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <title>Register - NomVault</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="bg-image">
 <header>
     <img src="assets/logo.png" class="logo" alt="NomVault Logo">
     <nav>
@@ -38,13 +38,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     </nav>
 </header>
 <div class="container">
-    <form method="post" class="auth-form">
+    <form method="post" class="auth-form glass">
         <h2>Create Account</h2>
         <p class="subtitle">Start your recipe journey</p>
         <input type="text" name="name" placeholder="Your Name" required>
         <input type="email" name="email" placeholder="Email Address" required>
         <input type="password" name="password" placeholder="Password" required>
-        <button type="submit">Register</button>
+        <button type="submit" class="btn-animate">Register</button>
         <?php if (isset($error)) echo "<p class='error'>$error</p>"; ?>
     </form>
 </div>
