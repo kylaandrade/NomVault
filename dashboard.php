@@ -34,6 +34,7 @@ if (isset($_GET['search'])) {
 <head>
     <title>Dashboard - NomVault</title>
     <link rel="stylesheet" href="css/style.css">
+    <script src="js/logout_confirm.js" defer></script>
 </head>
 <body>
 <header>
@@ -41,13 +42,33 @@ if (isset($_GET['search'])) {
     <nav>
         <a href="dashboard.php">Dashboard</a>
         <a href="add_recipe.php">Add Recipe</a>
-        <a href="logout.php">Logout</a>
+        <a href="logout.php" onclick="confirmLogout(event)">Logout</a>
     </nav>
 </header>
 
 <div class="container">
     <h2 class="dashboard-heading">Your Saved Recipes</h2>
     <p class="dashboard-subtext">Welcome to your personal recipe vault! Save, organize, and share your favorite recipes all in one place.</p>
+
+    <?php if (isset($_GET['success'])): ?>
+        <?php
+            $message = "";
+            $alertClass = "";
+            if ($_GET['success'] === 'add') {
+                $message = "Recipe added successfully!";
+                $alertClass = "alert-success";
+            } elseif ($_GET['success'] === 'edit') {
+                $message = "Recipe updated successfully!";
+                $alertClass = "alert-success";
+            } elseif ($_GET['success'] === 'delete') {
+                $message = "Recipe deleted successfully!";
+                $alertClass = "alert-danger";
+            }
+        ?>
+        <div class="alert <?= $alertClass ?>">
+            <?= $message ?>
+        </div>
+    <?php endif; ?>
 
     <div class="info-cards">
         <div class="info-card">
@@ -57,7 +78,7 @@ if (isset($_GET['search'])) {
     </div>
 
     <form method="GET" class="search-form">
-        <input type="text" name="search" placeholder="Search recipes..." value="<?= htmlspecialchars($search) ?>">
+        <input type="text" name="search" placeholder="Search recipes..." value="<?= $search ?>">
         <button type="submit">Search</button>
     </form>
 
@@ -66,12 +87,12 @@ if (isset($_GET['search'])) {
             <?php while ($row = $result->fetch_assoc()): ?>
                 <div class="recipe-card">
                     <?php if ($row['photo']): ?>
-                        <img src="uploads/<?= $row['photo'] ?>" alt="<?= htmlspecialchars($row['title']) ?>">
+                        <img src="uploads/<?= $row['photo'] ?>" alt="<?= $row['title'] ?>">
                     <?php endif; ?>
-                    <h3><?= htmlspecialchars($row['title']) ?></h3>
-                    <p><strong>Ingredients:</strong> <?= nl2br(htmlspecialchars($row['ingredients'])) ?></p>
+                    <h3><?= $row['title'] ?></h3>
+                    <p><strong>Ingredients:</strong> <?= $row['ingredients'] ?></p>
                     <hr class="divider">
-                    <p><strong>Steps:</strong> <?= nl2br(htmlspecialchars($row['steps'])) ?></p>
+                    <p><strong>Steps:</strong> <?= $row['steps'] ?></p>
                     <div class="actions">
                         <a href="edit_recipe.php?id=<?= $row['id'] ?>" class="btn edit">Edit</a>
                         <a href="delete_recipe.php?id=<?= $row['id'] ?>" class="btn delete" onclick="return confirm('Delete this recipe?')">Delete</a>

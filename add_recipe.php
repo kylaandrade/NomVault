@@ -8,21 +8,22 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $user_id = $_SESSION['user_id'];
     $title = $_POST['title'];
     $ingredients = $_POST['ingredients'];
     $steps = $_POST['steps'];
-    $user_id = $_SESSION['user_id'];
 
-    $photo = null;
-    if ($_FILES['photo']['name']) {
-        $photo = uniqid() . "_" . basename($_FILES['photo']['name']);
-        move_uploaded_file($_FILES['photo']['tmp_name'], "uploads/$photo");
+    $photo = "";
+    if (!empty($_FILES['photo']['name'])) {
+        $photo = time() . "_" . basename($_FILES['photo']['name']);
+        move_uploaded_file($_FILES['photo']['tmp_name'], "uploads/" . $photo);
     }
 
     $stmt = $conn->prepare("INSERT INTO recipes (user_id, title, ingredients, steps, photo) VALUES (?, ?, ?, ?, ?)");
     $stmt->bind_param("issss", $user_id, $title, $ingredients, $steps, $photo);
     $stmt->execute();
-    header("Location: dashboard.php");
+
+    header("Location: dashboard.php?success=add");
     exit();
 }
 ?>
@@ -38,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <nav>
         <a href="dashboard.php">Dashboard</a>
         <a href="add_recipe.php">Add Recipe</a>
-        <a href="logout.php">Logout</a>
+        <a href="logout.php" onclick="return confirm('Are you sure you want to logout?')">Logout</a>
     </nav>
 </header>
 
